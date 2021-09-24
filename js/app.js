@@ -20,11 +20,11 @@ for (var j = 0; j < boolMap.length; j++) {
     boolMap[j] = new Array(boardSize)
 }
 
-let boardNumber = [
-    ["1", "2", "3"],
-    ["4", "5", "6"],
-    ["7", "8", " "]
-]
+let boardNumber = new Array(boardSize);
+for (var i = 0; i < boardNumber.length; i++) {
+    boardNumber[i] = new Array(boardSize)
+}
+
 const GoalStage = [
     ["1", "2", "3"],
     ["4", "5", "6"],
@@ -146,7 +146,6 @@ let canSwap = (loA = { gridX: 0, gridY: 0 }, loB = { gridX: 0, gridY: 0 }) => {
 
 
 let swap = (arr, loA = { gridX: 0, gridY: 0 }, loB = { gridX: 0, gridY: 0 }) => {
-    count += 1;
     let temp = arr[loA.gridY][loA.gridX];
     arr[loA.gridY][loA.gridX] = arr[loB.gridY][loB.gridX];
     arr[loB.gridY][loB.gridX] = temp;
