@@ -129,29 +129,29 @@ let visited = [];
 
 
 let GBFS = (inputArr, heuristic) => {
-    let h_inLevel = inputArr.map(element => element.h);
-    let min = Math.min(...h_inLevel);
-    if (inputArr.length > 0) {
-        for (let i = 0; i < inputArr.length; i++) {
-            let NodeName = (element) => element === inputArr[i].name
-            if (inputArr[i].h === min && !visited.some(NodeName) && inputArr[i].h < heuristic) {
-                //best node
-                visited.push(inputArr[i].name)
-                GBFS(inputArr[i].arr,inputArr[i].h)
+    // let h_inLevel = inputArr.map(element => element.h);
+    // let min = Math.min(...h_inLevel);
+    // if (inputArr.length > 0) {
+    //     for (let i = 0; i < inputArr.length; i++) {
+    //         let NodeName = (element) => element === inputArr[i].name
+    //         if (inputArr[i].h === min && !visited.some(NodeName) && inputArr[i].h < heuristic) {
+    //             //best node
+    //             visited.push(inputArr[i].name)
+    //             GBFS(inputArr[i].arr,inputArr[i].h)
 
 
-            } else if ( inputArr[i].h >= heuristic && !visited.some(NodeName)) {
-                for (let j = 0; j < inputArr[i].arr.length; j++) {
-                    if(inputArr[i].arr[j].h < heuristic){
-                        
-                    }
+    //         } else if ( inputArr[i].h >= heuristic && !visited.some(NodeName)) {
+    //             for (let j = 0; j < inputArr[i].arr.length; j++) {
+    //                 if(inputArr[i].arr[j].h < heuristic){
+
+    //                 }
                     
                     
-                }
-            }
+    //             }
+    //         }
             
 
 
-        }
-    }
+    //     }
+    // }
 }
