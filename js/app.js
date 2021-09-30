@@ -25,7 +25,25 @@ for (var i = 0; i < boardNumber.length; i++) {
     boardNumber[i] = new Array(boardSize)
 }
 
+// const GoalStage = [
+//     ["A", "B", "S"],
+//     ["O", "L", "U"],
+//     ["T", "E", " "]
+// ]
+
+// boardNumber = [
+//     ["A", "B", "S"],
+//     ["O", "L", "U"],
+//     ["T", "E", " "]
+// ]
+
 const GoalStage = [
+    ["1", "2", "3"],
+    ["4", "5", "6"],
+    ["7", "8", " "]
+]
+
+boardNumber = [
     ["1", "2", "3"],
     ["4", "5", "6"],
     ["7", "8", " "]
@@ -153,34 +171,63 @@ let swap = (arr, loA = { gridX: 0, gridY: 0 }, loB = { gridX: 0, gridY: 0 }) => 
 }
 
 
-let genNumber = () => {
-    let arr = [];
-    while (arr.length < boardSize ** 2) {
-        var r = Math.floor(Math.random() * (boardSize ** 2)) + 1;
-        if (arr.indexOf(r) === -1) {
-            arr.push(r)
-        }
-    }
-    let count = 0;
-    for (let i = 0; i < boardSize; i++) {
-        for (let j = 0; j < boardSize; j++) {
-            if (arr[count] == (boardSize ** 2)) {
-                boardNumber[i][j] = " "
-                blankLocation.gridX = j;
-                blankLocation.gridY = i;
-            } else {
-                boardNumber[i][j] = arr[count].toString()
-            }
-            boolMap[i][j] = false;
-            count++
-        }
+let MoveWithDirect = (bL, direction) => {
 
-    }
-    // console.log(boardNumber)
-    // console.log(boolMap)
-    // console.log(boardMap)
+    let newLo = { X: bL.gridX, Y: bL.gridY };
+    let dirLowerC = direction.toLowerCase();
 
+
+    switch (dirLowerC) {
+        case "up":
+            newLo.Y -= 1
+            break;
+        case "down":
+            newLo.Y += 1
+            break;
+        case "left":
+            newLo.X -= 1
+            break;
+        case "right":
+            newLo.X += 1
+            break;
+    }
+    // console.log(newLo)
+     
+    // swap
+    swap(boardNumber,bL,{ gridX: newLo.X, gridY: newLo.Y })
+    blankLocation = { gridX: newLo.X, gridY: newLo.Y };
+    checkCurrect();
 }
+
+
+// let genNumber = () => {
+//     let arr = [];
+//     while (arr.length < boardSize ** 2) {
+//         var r = Math.floor(Math.random() * (boardSize ** 2)) + 1;
+//         if (arr.indexOf(r) === -1) {
+//             arr.push(r)
+//         }
+//     }
+//     let count = 0;
+//     for (let i = 0; i < boardSize; i++) {
+//         for (let j = 0; j < boardSize; j++) {
+//             if (arr[count] == (boardSize ** 2)) {
+//                 boardNumber[i][j] = " "
+//                 blankLocation.gridX = j;
+//                 blankLocation.gridY = i;
+//             } else {
+//                 boardNumber[i][j] = arr[count].toString()
+//             }
+//             boolMap[i][j] = false;
+//             count++
+//         }
+
+//     }
+//     // console.log(boardNumber)
+//     // console.log(boolMap)
+//     // console.log(boardMap)
+
+// }
 
 let checkCurrect = () => {
     h = 0;
@@ -233,4 +280,4 @@ function win() {
 
 }
 
-genNumber()
+// genNumber()
