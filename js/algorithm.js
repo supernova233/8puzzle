@@ -199,7 +199,8 @@ let get_CurrentLocation = (Board) => {
 
 
 function greedyBFS(bB, currentLocation, heuristic) {
-    console.log(boardNode.length)
+
+
     if (boardNode.length == 0) {
         let direction = directionAvailable(currentLocation)
         let obj = {};
@@ -226,11 +227,10 @@ function greedyBFS(bB, currentLocation, heuristic) {
                 let obj = {};
                 
                 for (let j = 0; j < direction.length; j++) {
-                    console.log(direction[j])
-                    
+                    // console.log(direction[j])   
                     obj = { direction: direction[j], h: get_h(botMoveTo(boardNode[i].board, cLo, direction[j])), board: botMoveTo(boardNode[i].board, cLo, direction[j]), child: [] }
                     boardNode[i].child.push(obj)
-                    console.log(obj)
+                    // console.log(obj)
                 }
             // }
         }
