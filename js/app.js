@@ -2,6 +2,8 @@
 let boardSize = 3; // square
 let fontSize = 30;
 
+let isPlaying = false;
+
 let canvasConfig = {
     width: 800,
     height: 600
@@ -29,7 +31,9 @@ console.log(startDraw)
 let debugMode = false;
 
 let count = 0;
+let moveCount = 0;
 let h = 0;
+
 
 
 let blankLocation = { gridX: 0, gridY: 0 };
@@ -49,29 +53,30 @@ for (var i = 0; i < boardNumber.length; i++) {
     boardNumber[i] = new Array(boardSize)
 }
 
-// const GoalStage = [
-//     ["A", "B", "S"],
-//     ["O", "L", "U"],
-//     ["T", "E", " "]
-// ]
-
-// boardNumber = [
-//     ["A", "B", "S"],
-//     ["O", "L", "U"],
-//     ["T", "E", " "]
-// ]
 
 const GoalStage = [
-    ["1", "2", "3"],
-    ["4", "5", "6"],
-    ["7", "8", " "]
+    ["F", "O", "O"],
+    ["T", "B", "A"],
+    ["L", "L", " "]
 ]
 
 boardNumber = [
-    ["1", "2", "3"],
-    ["4", "5", "6"],
-    ["7", "8", " "]
+    ["F", "O", "O"],
+    ["T", "B", "A"],
+    ["L", "L", " "]
 ]
+
+// const GoalStage = [
+//     ["1", "2", "3"],
+//     ["4", "5", "6"],
+//     ["7", "8", " "]
+// ]
+
+// boardNumber = [
+//     ["1", "2", "3"],
+//     ["4", "5", "6"],
+//     ["7", "8", " "]
+// ]
 
 
 
@@ -99,7 +104,7 @@ let drawBoard = () => {
             text(boardNumber[i][j], x, y + (box.size / 2) - (fontSize / 2), box.size, box.size);
             textStyle(BOLD)
 
-            boardMap[i][j] = { x: x , y: y , x2: x + box.size, y2: y + box.size }
+            boardMap[i][j] = { x: x, y: y, x2: x + box.size, y2: y + box.size }
         }
 
     }
@@ -279,6 +284,80 @@ let selectGameMode = (evt) => {
 
 
 
+
+
+let img;
+let imgHint;
+
+function preload() {
+
+    img = loadImage('./img/Logo.png');
+    imgHint = loadImage('./img/football.jpeg');
+}
+
+
+let drawIndex = () => {
+    let LogoImg = createImg(
+        './img/Logo.png'
+    );
+    LogoImg.position(225, 105);
+}
+
+let numTime = 0;
+let textTime = "00 : 00";
+let isTimer = false;
+
+let timer = () => {
+
+    numTime += 1
+
+    let seconds = numTime % 60;
+    let minutes = Math.floor(numTime / 60);
+
+    if (minutes < 10) { minutes = "0" + minutes; }
+    if (seconds < 10) { seconds = "0" + seconds; }
+
+    textTime = minutes + " : " + seconds;
+}
+let clock;
+
+let drawTime = () => {
+
+    fill(50, 50, 50);
+    textAlign(LEFT);
+    textSize(24);
+    text(textTime, 20, 50)
+}
+
+let drawHint = () => {
+
+}
+
+let startGame = () => {
+
+    randomize();
+    numTime = 0;
+    moveCount = 0;
+    isPlaying = true;
+    isEndgame = false;
+    clock = setInterval(timer, 1000)
+    timer() // Start timer
+}
+
+let playBtn = () => {
+    fill(255, 255, 255);
+    rect(352, 350, 150, 60, 15);
+
+    fill(150, 150, 150);
+    // fill(255, 163, 26);
+    textAlign(CENTER);
+    textSize(fontSize);
+    text("Play", 352, 365, 150, 365)
+}
+
+
+let isEndgame = false;
+
 function win() {
 
     let isWin = [boolMap[0].every((val) => val === true), boolMap[1].every((val) => val === true), boolMap[2].every((val) => val === true)].every((val) => val === true)
@@ -286,7 +365,18 @@ function win() {
 
     if (isWin) {
         setTimeout(() => {
-            alert("You Win !!!")
+            // alert("You Win !!!")
+            isEndgame = true;
+            isPlaying = false;
+
+            document.getElementById("timeTaked").innerHTML = textTime;
+            document.getElementById("moved").innerHTML = moveCount;
+
+            var myModal = document.getElementById('staticBackdrop');
+            var modal = bootstrap.Modal.getOrCreateInstance(myModal);
+            modal.show()
+
+            clearInterval(clock) // stop timer
             console.warn("You Win !!!")
         }, 100)
 
@@ -298,4 +388,4 @@ function win() {
 
 }
 
-// genNumber()
+

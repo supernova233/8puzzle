@@ -47,8 +47,12 @@ let NodeArr = [
 
 let test = () => {
 
-    console.log("Starting...");
-    GBFS(NodeArr, 5);
+    var myModal = document.getElementById('staticBackdrop');
+    var modal = bootstrap.Modal.getOrCreateInstance(myModal)
+    modal.show()
+
+    // console.log("Starting...");
+    // GBFS(NodeArr, 5);
 
     // arr1[0][0] = "Z";
 
