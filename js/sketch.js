@@ -1,5 +1,5 @@
 function setup() {
-    createCanvas(800, 210)
+    createCanvas(canvasConfig.width, canvasConfig.height)
 }
 
 function draw() {
@@ -13,9 +13,9 @@ function draw() {
 
 function mouseClicked(evt) {
     
-    if (findLocation(evt.x, evt.y) !== -1) {
-        if (canSwap(findLocation(evt.x, evt.y), blankLocation)) {
-            boardNumber = swap(boardNumber, findLocation(evt.x, evt.y), blankLocation);
+    if (findLocation(evt.layerX, evt.layerX) !== -1) {
+        if (canSwap(findLocation(evt.layerX, evt.layerX), blankLocation)) {
+            boardNumber = swap(boardNumber, findLocation(evt.layerX, evt.layerX), blankLocation);
             checkCurrect();
             win();
         }
@@ -23,8 +23,11 @@ function mouseClicked(evt) {
     }
     
 
-    // console.log(boardMap)
-    // console.log(findLocation(evt.x,evt.y))
+    console.log(findLocation(evt.layerX, evt.layerX))
+
+    console.log(boardMap)
+    console.log(evt)
+    // console.log(evt)
 
 
 

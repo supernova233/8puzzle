@@ -2,6 +2,30 @@
 let boardSize = 3; // square
 let fontSize = 30;
 
+let canvasConfig = {
+    width: 800,
+    height: 600
+}
+
+let box = {
+    x: 0,
+    y: 0,
+    size: 85,
+    margin: 5
+}
+
+let boardConfig = {
+    width: (box.size + box.margin) * boardSize,
+    height: (box.size + box.margin) * boardSize
+}
+
+let startDraw = (canvasConfig.width / 2) - (boardConfig.width / 2);
+
+let verPadding = 50;
+
+
+console.log(startDraw)
+
 let debugMode = false;
 
 let count = 0;
@@ -49,12 +73,7 @@ boardNumber = [
     ["7", "8", " "]
 ]
 
-let box = {
-    x: 0,
-    y: 0,
-    size: 65,
-    margin: 5
-}
+
 
 
 let drawBoard = () => {
@@ -63,8 +82,8 @@ let drawBoard = () => {
         // Ver
         for (let j = 0; j < boardSize; j++) {
             // Hor
-            let x = (box.size + box.margin) * j;
-            let y = (box.size + box.margin) * i;
+            let x = ((box.size + box.margin) * j) + startDraw;
+            let y = ((box.size + box.margin) * i) + verPadding;
             if (boardNumber[i][j] == " ") {
                 fill(150, 150, 150);
                 blankLocation = { gridX: j, gridY: i };
@@ -80,7 +99,7 @@ let drawBoard = () => {
             text(boardNumber[i][j], x, y + (box.size / 2) - (fontSize / 2), box.size, box.size);
             textStyle(BOLD)
 
-            boardMap[i][j] = { x: x, y: y, x2: x + box.size, y2: y + box.size }
+            boardMap[i][j] = { x: x , y: y , x2: x + box.size, y2: y + box.size }
         }
 
     }
@@ -191,9 +210,9 @@ let MoveWithDirect = (bL, direction) => {
             newLo.X += 1
             break;
     }
-     
+
     // swap
-    swap(boardNumber,bL,{ gridX: newLo.X, gridY: newLo.Y })
+    swap(boardNumber, bL, { gridX: newLo.X, gridY: newLo.Y })
     blankLocation = { gridX: newLo.X, gridY: newLo.Y };
     checkCurrect();
 }
