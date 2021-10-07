@@ -19,80 +19,27 @@ for (var i = 0; i < boardNumber.length; i++) {
 
 let NodeArr = [
     {
-        name: "A", h: 9, arr: [
-            {
-                name: "D", h: 8, arr: [
-                    { name: "L", h: 8, arr: [] },
-                    { name: "M", h: 9, arr: [] },
-
-                ]
-            },
-            {
-                name: "E", h: 7, arr: [
-                    { name: "N", h: 8, arr: [] },
-                    { name: "O", h: 7, arr: [] }
-                ]
-            }
+        name: "A", h: 5, child: [
+            { name: "C", h: 3, child: [] },
         ]
     },
     {
-        name: "B", h: 8, arr: [
+        name: "B", h: 4, child: [
             {
-                name: "F", h: 9, arr: [
-                    { name: "P", h: 8, arr: [] },
-                    { name: "Q", h: 9, arr: [] },
+                name: "D", h: 3, child: [
+                    { name: "F", h: 3, child: [] },
+                    { name: "G", h: 4, child: [] },
                 ]
             },
             {
-                name: "G", h: 8, arr: [
-                    { name: "R", h: 8, arr: [] },
-                    { name: "S", h: 9, arr: [] },
-                ]
-            },
-            { name: "H", h: 8, arr: [] }
-        ]
-    },
-    {
-        name: "C", h: 9, arr: [
-            {
-                name: "I", h: 9, arr: [
-                    { name: "T", h: 7, arr: [] },
-                    { name: "U", h: 8, arr: [] },
-                ]
-            },
-            { name: "J", h: 9, arr: [] },
-            {
-                name: "K", h: 8, arr: [
-                    {
-                        name: "V", h: 7, arr: [
-                            { name: "Y", h: 6, arr: [] },
-                        ]
-                    },
-                    {
-                        name: "W", h: 7, arr: [
-                            { name: "Z", h: 5, arr: [] },
-                        ]
-                    },
-                    {
-                        name: "X", h: 8, arr: [
-                            {
-                                name: "1A", h: 4, arr: [
-                                    { name: "1C", h: 2, arr: [] }
-                                ]
-                            },
-                            {
-                                name: "1B", h: 4, arr: [
-                                    { name: "1D", h: 0, arr: [] }
-                                ]
-                            },
-                        ]
-                    },
+                name: "E", h: 2, child: [
+                    { name: "H", h: 0, child: [] },
+                    { name: "I", h: 3, child: [] },
                 ]
             },
 
         ]
     },
-
 ]
 
 // console.log(boardNumber);
@@ -101,7 +48,7 @@ let NodeArr = [
 let test = () => {
 
     console.log("Starting...");
-    GBFS(NodeArr, 9);
+    GBFS(NodeArr, 5);
 
     // arr1[0][0] = "Z";
 
@@ -126,32 +73,52 @@ let findVal = (inputArr) => {
 let target_h = 0;
 let path = [];
 let visited = [];
+let Test_count = 0;
 
+let findMin = (arr) => {
+    let h_inLevel = arr.map(x => x.h);
+    return Math.min(...h_inLevel);
+}
 
 let GBFS = (inputArr, heuristic) => {
-    // let h_inLevel = inputArr.map(element => element.h);
-    // let min = Math.min(...h_inLevel);
-    // if (inputArr.length > 0) {
-    //     for (let i = 0; i < inputArr.length; i++) {
-    //         let NodeName = (element) => element === inputArr[i].name
-    //         if (inputArr[i].h === min && !visited.some(NodeName) && inputArr[i].h < heuristic) {
-    //             //best node
-    //             visited.push(inputArr[i].name)
-    //             GBFS(inputArr[i].arr,inputArr[i].h)
+
+    Test_count++;
+    console.log("Count :" + Test_count)
+
+    let min_h = findMin(inputArr)
+    inputArr = inputArr.sort((a,b)=> a.h - b.h)
+    if (inputArr.length > 0) {
+
+        for (let i = 0; i < inputArr.length; i++) {
+            if (inputArr[i].h !== target_h) {
+                //continue search
+
+                if (inputArr[i].h == min_h && inputArr[i].h <= heuristic) {
+                    // Best first select
+                    path.push(inputArr[i].name);
+                    GBFS(inputArr[i].child, inputArr[i].h)
+                    return
+
+                } else{
+
+                    if (inputArr[i].h < heuristic && inputArr[i].h != target_h) {
+                         path.push(inputArr[i].name);
+                         GBFS(inputArr[i].child, inputArr[i].h + 1)
+                         return
+                    }
+                }
+
+            } else {
+                //
+                path.push(inputArr[i].name);
+                console.warn("Found !!!")
+                console.log(path)
+                return
+            }
 
 
-    //         } else if ( inputArr[i].h >= heuristic && !visited.some(NodeName)) {
-    //             for (let j = 0; j < inputArr[i].arr.length; j++) {
-    //                 if(inputArr[i].arr[j].h < heuristic){
-
-    //                 }
-                    
-                    
-    //             }
-    //         }
-            
+        }
+    }
 
 
-    //     }
-    // }
 }

@@ -191,7 +191,6 @@ let MoveWithDirect = (bL, direction) => {
             newLo.X += 1
             break;
     }
-    // console.log(newLo)
      
     // swap
     swap(boardNumber,bL,{ gridX: newLo.X, gridY: newLo.Y })

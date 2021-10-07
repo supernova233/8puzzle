@@ -170,7 +170,7 @@ let randomMove = () => {
 }
 
 let randomize = () => {
-    let iterate = 100;
+    let iterate = 72;
     for (var i = 0; i < iterate; i++) {
         randomMove()
         // console.log(boardNumber)
@@ -217,7 +217,7 @@ function greedyBFS(bB, currentLocation, heuristic) {
 
         for (let i = 0; i < boardNode.length; i++) {
 
-            // if (boardNode[i].h < heuristic && boardNode[i].h == min) {
+            if (boardNode[i].h != target_h) {
                 let cLo = get_CurrentLocation(boardNode[i].board);
                 let direction = directionAvailable(cLo)
                 var index = direction.indexOf(invertDirection(boardNode[i].direction));
@@ -225,14 +225,19 @@ function greedyBFS(bB, currentLocation, heuristic) {
                     direction.splice(index, 1);
                 }
                 let obj = {};
-                
+
                 for (let j = 0; j < direction.length; j++) {
-                    // console.log(direction[j])   
+                    // console.log(direction[j])
+
                     obj = { direction: direction[j], h: get_h(botMoveTo(boardNode[i].board, cLo, direction[j])), board: botMoveTo(boardNode[i].board, cLo, direction[j]), child: [] }
                     boardNode[i].child.push(obj)
                     // console.log(obj)
                 }
-            // }
+            }else{
+                // boardNode[i].h == 0
+                // found !
+                //backTrack(boardNode[i])
+            }
         }
 
         console.log(boardNode)
