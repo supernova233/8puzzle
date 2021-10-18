@@ -43,16 +43,24 @@ let copyArr = (arr) => {
 
 let botBoard = copyArr(boardNumber);
 
+
+
+//// Help player ////
 let helpPlayer = () => {
 
+    // console.log("Let's me Help !!")
 
     botBoard = copyArr(boardNumber);
     botBlankLocation = { ...blankLocation }
     current_h = get_h(botBoard)
 
     greedyBFS(botBoard, botBlankLocation, current_h);
-    botCheck();
+    console.log(DirectionToGrid("up",blankLocation))
+    // botCheck();
 }
+
+
+
 
 
 
@@ -196,7 +204,44 @@ let get_CurrentLocation = (Board) => {
     }
 }
 
+function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+    for (var i = 0; i < 5; i++)
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function getRootNode(Tree, name, _callback) {
+    // console.log(name)
+    if (boardNode.some((el) => el.nodeID == name)) {
+        console.log(name)
+        _callback(name)
+        return
+    } else {
+        // console.log(name)
+        for (let i = 0; i < Tree.length; i++) {
+            if (boardNode[i].nodeID == name) {
+                // console.log(name)
+                return
+            } else {
+
+                if (Tree[i].child.some((el) => el.name == name)) {
+                    getRootNode(boardNode, Tree[i].nodeID, _callback)
+                } else {
+                    getRootNode(Tree[i].child, name, _callback)
+                }
+
+            }
+
+        }
+
+    }
+
+
+}
 
 function greedyBFS(bB, currentLocation, heuristic) {
 
@@ -206,39 +251,106 @@ function greedyBFS(bB, currentLocation, heuristic) {
         let obj = {};
         for (let i = 0; i < direction.length; i++) {
 
-            obj = { direction: direction[i], h: get_h(botMoveTo(bB, currentLocation, direction[i])), board: botMoveTo(bB, currentLocation, direction[i]), child: [] }
+            obj = { nodeID: makeid(), direction: direction[i], h: get_h(botMoveTo(bB, currentLocation, direction[i])), board: botMoveTo(bB, currentLocation, direction[i]), child: [] }
             boardNode.push(obj)
             console.log(obj)
+
         }
+        greedyBFS(bB, currentLocation, heuristic)
     } else if (boardNode.length > 0) {
 
         let h_inLevel = boardNode.map(element => element.h);
         let min = Math.min(...h_inLevel);
 
-        for (let i = 0; i < boardNode.length; i++) {
+        // for (let i = 0; i < boardNode.length; i++) {
 
-            if (boardNode[i].h != target_h) {
+        //     if (boardNode[i].h != target_h) {
+        //         let cLo = get_CurrentLocation(boardNode[i].board);
+        //         let direction = directionAvailable(cLo)
+        //         var index = direction.indexOf(invertDirection(boardNode[i].direction));
+        //         if (index !== -1) {
+        //             direction.splice(index, 1);
+        //         }
+        //         let obj = {};
+
+        //         for (let j = 0; j < direction.length; j++) {
+        //             obj = { direction: direction[j], h: get_h(botMoveTo(boardNode[i].board, cLo, direction[j])), board: botMoveTo(boardNode[i].board, cLo, direction[j]), child: [] }
+        //             boardNode[i].child.push(obj)
+        //             // console.log(obj)
+        //         }
+        //     }else{
+
+        //     }
+        // }
+
+
+
+        for (let i = 0; i < boardNode.length; i++) {
+            if (boardNode[i].h !== target_h) {
+                //continue search
                 let cLo = get_CurrentLocation(boardNode[i].board);
                 let direction = directionAvailable(cLo)
                 var index = direction.indexOf(invertDirection(boardNode[i].direction));
                 if (index !== -1) {
                     direction.splice(index, 1);
                 }
-                let obj = {};
 
-                for (let j = 0; j < direction.length; j++) {
-                    // console.log(direction[j])
+                if (boardNode[i].h == min && boardNode[i].h <= heuristic) {
+                    // Best first select
 
-                    obj = { direction: direction[j], h: get_h(botMoveTo(boardNode[i].board, cLo, direction[j])), board: botMoveTo(boardNode[i].board, cLo, direction[j]), child: [] }
-                    boardNode[i].child.push(obj)
-                    // console.log(obj)
+                    let obj = {};
+
+                    for (let j = 0; j < direction.length; j++) {
+                        obj = { nodeID: makeid(), direction: direction[j], h: get_h(botMoveTo(boardNode[i].board, cLo, direction[j])), board: botMoveTo(boardNode[i].board, cLo, direction[j]), child: [] }
+                        boardNode[i].child.push(obj)
+                        // console.log(obj)
+                    }
+                    // path.push(boardNode[i].name);
+                    GBFS(boardNode[i].child,cLo, boardNode[i].h)
+
+
+
+                } else {
+
+                    if (boardNode[i].h < heuristic && boardNode[i].h != target_h) {
+                        // path.push(inputArr[i].name);
+                        let obj = {};
+
+                        for (let j = 0; j < direction.length; j++) {
+                            obj = {nodeID: makeid(), direction: direction[j], h: get_h(botMoveTo(boardNode[i].board, cLo, direction[j])), board: botMoveTo(boardNode[i].board, cLo, direction[j]), child: [] }
+                            boardNode[i].child.push(obj)
+                            // console.log(obj)
+                        }
+                        GBFS(boardNode[i].child,cLo, boardNode[i].h + 1)
+
+
+                    }
                 }
-            }else{
-                // boardNode[i].h == 0
-                // found !
-                //backTrack(boardNode[i])
+
+            } else {
+                //
+                // path.push(inputArr[i].name);
+
+                getRootNode(boardNode, boardNode[i].nodeID, (Parent) => {
+                    for (let k = 0; k < boardNode.length; k++) {
+                        if(boardNode[k].nodeID == Parent){
+                            let pos = DirectionToGrid(boardNode[k].direction,blankLocation)
+                            Blink(pos.gridX,pos.gridY)
+                        }
+                        
+                        
+                    }
+                    
+                    
+                })
+                console.warn("Found !!!")
+                console.log(boardNode[i])
+                return
             }
+
+
         }
+
 
         console.log(boardNode)
     }

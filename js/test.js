@@ -26,20 +26,42 @@ let NodeArr = [
     {
         name: "B", h: 4, child: [
             {
-                name: "D", h: 3, child: [
+                name: "D", h: 2, child: [
                     { name: "F", h: 3, child: [] },
                     { name: "G", h: 4, child: [] },
                 ]
             },
             {
-                name: "E", h: 2, child: [
-                    { name: "H", h: 0, child: [] },
+                name: "E", h: 3, child: [
+                    { name: "H", h: 1, child: [] },
                     { name: "I", h: 3, child: [] },
                 ]
             },
 
         ]
+
     },
+
+    {
+        name: "J", h: 4, child: [
+            {
+                name: "K", h: 4, child: [
+                    { name: "M", h: 3, child: [] },
+                    { name: "N", h: 4, child: [] },
+                ]
+            },
+            {
+                name: "L", h: 3, child: [
+                    { name: "O", h: 0, child: [] },
+                    { name: "P", h: 3, child: [] },
+                ]
+            },
+
+        ]
+
+    },
+
+
 ]
 
 // console.log(boardNumber);
@@ -47,31 +69,14 @@ let NodeArr = [
 
 let test = () => {
 
-    var myModal = document.getElementById('staticBackdrop');
-    var modal = bootstrap.Modal.getOrCreateInstance(myModal)
-    modal.show()
-
     // console.log("Starting...");
-    // GBFS(NodeArr, 5);
-
-    // arr1[0][0] = "Z";
+    GBFS(NodeArr, 5);
 
     // randomize()
-    // findVal(NodeArr)
 
 }
 
-let findVal = (inputArr) => {
 
-    if (inputArr.length > 0) {
-        for (var i = 0; i < inputArr.length; i++) {
-            findVal(inputArr[i]);
-        }
-    } else {
-        console.log(inputArr);
-        return
-    }
-}
 
 
 let target_h = 0;
@@ -84,13 +89,42 @@ let findMin = (arr) => {
     return Math.min(...h_inLevel);
 }
 
-let GBFS = (inputArr, heuristic) => {
+function getParent(Tree, name, _callback) {
+    // console.log(name)
+    if (NodeArr.some((el) => el.name == name)) {
+        // console.log(name)
+        _callback(name)
+        return
+    } else {
+        // console.log(name)
+        for (let i = 0; i < Tree.length; i++) {
+            if (NodeArr[i].name == name) {
+                console.log(name)
+                return
+            } else {
 
-    Test_count++;
-    console.log("Count :" + Test_count)
+                if (Tree[i].child.some((el) => el.name == name)) {
+                    getParent(NodeArr, Tree[i].name, _callback)
+                } else {
+                    getParent(Tree[i].child, name, _callback)
+                }
+
+            }
+
+        }
+
+    }
+
+
+}
+
+function GBFS(inputArr, heuristic) {
+
+    // Test_count++;
+    // console.log("Count :" + Test_count)
 
     let min_h = findMin(inputArr)
-    inputArr = inputArr.sort((a,b)=> a.h - b.h)
+    inputArr = inputArr.sort((a, b) => a.h - b.h)
     if (inputArr.length > 0) {
 
         for (let i = 0; i < inputArr.length; i++) {
@@ -101,20 +135,26 @@ let GBFS = (inputArr, heuristic) => {
                     // Best first select
                     path.push(inputArr[i].name);
                     GBFS(inputArr[i].child, inputArr[i].h)
-                    return
 
-                } else{
+
+
+                } else {
 
                     if (inputArr[i].h < heuristic && inputArr[i].h != target_h) {
-                         path.push(inputArr[i].name);
-                         GBFS(inputArr[i].child, inputArr[i].h + 1)
-                         return
+                        path.push(inputArr[i].name);
+                        GBFS(inputArr[i].child, inputArr[i].h + 1)
+
+
                     }
                 }
 
             } else {
                 //
                 path.push(inputArr[i].name);
+
+                getParent(NodeArr, inputArr[i].name, (Parent) => {
+                    console.log(" Root Node == "+Parent)
+                })
                 console.warn("Found !!!")
                 console.log(path)
                 return
@@ -126,3 +166,8 @@ let GBFS = (inputArr, heuristic) => {
 
 
 }
+
+
+
+
+

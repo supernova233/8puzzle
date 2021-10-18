@@ -3,6 +3,7 @@ let boardSize = 3; // square
 let fontSize = 30;
 
 let isPlaying = false;
+let helpTime = 6000; // milliSec
 
 let canvasConfig = {
     width: 800,
@@ -26,7 +27,7 @@ let startDraw = (canvasConfig.width / 2) - (boardConfig.width / 2);
 let verPadding = 50;
 
 
-console.log(startDraw)
+// console.log(startDraw)
 
 let debugMode = false;
 
@@ -52,6 +53,13 @@ let boardNumber = new Array(boardSize);
 for (var i = 0; i < boardNumber.length; i++) {
     boardNumber[i] = new Array(boardSize)
 }
+
+
+let BlinkMap = [
+    [false, false, false],
+    [false, false, false],
+    [false, false, false]
+]
 
 
 const GoalStage = [
@@ -92,9 +100,17 @@ let drawBoard = () => {
             if (boardNumber[i][j] == " ") {
                 fill(150, 150, 150);
                 blankLocation = { gridX: j, gridY: i };
-            } else {
-                fill(255, 255, 255);
             }
+            else {
+                if (BlinkMap[i][j] == true) {
+                    fill(232, 255, 209)
+                    // console.log(BlinkMap[i][j])
+                } else {
+                    fill(255, 255, 255);
+                }
+
+            }
+
 
             square(x, y, box.size);
 
@@ -121,6 +137,7 @@ let drawBoard = () => {
                 let yy = (box.size + box.margin) * i;
                 if (boolMap[i][j]) {
                     fill(78, 199, 78);
+                    console.log(BlinkMap[0][3])
                 } else {
                     fill(255, 162, 143);
                 }
@@ -333,6 +350,11 @@ let drawHint = () => {
 
 }
 
+let helpTimer;
+let countdown = () => {
+    helpTimer = setTimeout(helpPlayer, helpTime)
+}
+
 let startGame = () => {
 
     randomize();
@@ -387,5 +409,31 @@ function win() {
     // console.log(GoalStage)
 
 }
+
+let DirectionToGrid = (dir,blankLocation) => {
+    switch (dir) {
+        case "up":
+            return {gridX:blankLocation.gridX, gridY:blankLocation.gridY - 1}
+            break;
+        case "down":
+            return {gridX:blankLocation.gridX, gridY:blankLocation.gridY + 1}
+            break;
+        case "left":
+            return {gridX:blankLocation.gridX -1, gridY:blankLocation.gridY}
+            break;
+        case "right":
+            return {gridX:blankLocation.gridX +1, gridY:blankLocation.gridY}
+            break;
+    }
+}
+
+let blinking;
+let Blink = (x,y) => {
+    blinking = setInterval(() => {
+        BlinkMap[y][x] = !BlinkMap[y][x];
+        // console.log(BlinkMap[0][3])
+    }, 300)
+}
+
 
 

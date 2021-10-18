@@ -39,8 +39,14 @@ function mouseClicked(evt) {
 
         if (findLocation(evt.layerX, evt.layerY) !== -1) {
             if (canSwap(findLocation(evt.layerX, evt.layerY), blankLocation) && isEndgame != true) {
+                // Move
                 boardNumber = swap(boardNumber, findLocation(evt.layerX, evt.layerY), blankLocation);
                 moveCount++;
+
+                // CountDown
+                clearTimeout(helpTimer);
+                countdown();
+
                 checkCurrect();
                 win();
             }
